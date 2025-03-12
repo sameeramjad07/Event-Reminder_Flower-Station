@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Event Reminder System
+
+This project is a simple event reminder system that allows users to set reminders for various events. The system consists of a frontend and a backend to handle form submissions and store event data.
+
+## Core Requirements
+
+### Frontend
+
+1. **Set Event Reminder Button**: A button on the page labeled "Set Event Reminder".
+2. **Form Modal/Pop-up**: When the button is clicked, it opens a form in a modal or pop-up.
+3. **Form Input Fields**:
+   - Event Name
+   - Event Date
+   - Customer Email
+   - Event Type (Birthday, Anniversary, others)
+   - An option to add event type if 'Other' is chosen
+   - Ability to add up to three event reminders
+4. **Submit Button**: A button to send the form data to the backend.
+
+### Backend
+
+1. **Data Storage**: The submitted form data should be stored in a database or a structured data format (e.g., JSON, Firebase, MongoDB, MySQL, PostgreSQL, etc.).
+2. **Form Handling**: The backend should handle form submissions and store data securely.
+3. **Response Handling**: The system should return a success or failure response after form submission.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js
+- A database system (e.g., MongoDB, MySQL, PostgreSQL)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/event-reminder-system.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd event-reminder-system
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Running the Application
 
-## Learn More
+1. Start the backend server:
+   ```bash
+   npm run start:backend
+   ```
+2. Start the frontend server:
+   ```bash
+   npm run start:frontend
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Usage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Open the application in your web browser.
+2. Click the "Set Event Reminder" button to open the form.
+3. Fill in the event details and submit the form.
+4. The backend will process the form data and store it in the database.
+5. A success or failure message will be displayed based on the form submission result.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
