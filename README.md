@@ -23,6 +23,19 @@ This project is a simple event reminder system that allows users to set reminder
 2. **Form Handling**: The backend should handle form submissions and store data securely.
 3. **Response Handling**: The system should return a success or failure response after form submission.
 
+## Vercel Deployment
+
+The application is deployed on Vercel and can be accessed here:  
+[**Event Reminder System on Vercel**](https://event-reminder-system-gamma.vercel.app/)
+
+## Test Credentials
+
+Use the following credentials to test the application:
+
+- **Email**: `test@test.com`
+- **Password**: `12345678`  
+  _Note_: These are for testing purposes only. Ensure you have an account set up in your authentication provider (e.g., credentials provider in NextAuth) matching these details.
+
 ## Getting Started
 
 ### Prerequisites
@@ -34,11 +47,11 @@ This project is a simple event reminder system that allows users to set reminder
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/event-reminder-system.git
+   git clone https://github.com/sameeramjad07/Event-Reminder_Flower-Station.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd event-reminder-system
+   cd Event-Reminder_Flower-Station
    ```
 3. Install dependencies:
    ```bash
@@ -49,11 +62,7 @@ This project is a simple event reminder system that allows users to set reminder
 
 1. Start the backend server:
    ```bash
-   npm run start:backend
-   ```
-2. Start the frontend server:
-   ```bash
-   npm run start:frontend
+   npm run dev
    ```
 
 ## Usage
