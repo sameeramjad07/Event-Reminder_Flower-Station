@@ -13,18 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CalendarIcon, PlusCircle, Trash2 } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { DatePicker } from "@/components/custom-calendar/date-picker";
+import { useToast } from "@/hooks/use-toast";
 import { saveReminders } from "@/app/actions";
 import type { EventReminder } from "@/lib/types";
-import { toast } from "sonner";
 
 interface ReminderFormProps {
   reminders: EventReminder[];
@@ -42,6 +35,7 @@ export function ReminderForm({
   onSuccess,
 }: ReminderFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const updateReminder = (
     id: number,
@@ -75,7 +69,11 @@ export function ReminderForm({
     );
 
     if (!isValid) {
-      toast.error("Please fill in all required fields for each reminder.");
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields for each reminder.",
+        variant: "destructive",
+      });
       setIsSubmitting(false);
       return;
     }
@@ -84,13 +82,21 @@ export function ReminderForm({
       const result = await saveReminders(reminders);
 
       if (result.success) {
-        toast.success("Your event reminders have been saved.");
+        toast({
+          title: "Success!",
+          description: "Your event reminders have been saved.",
+        });
         onSuccess();
       } else {
         throw new Error(result.error || "Failed to save reminders");
       }
     } catch (error) {
-      toast.error("Failed to save reminder");
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error ? error.message : "Failed to save reminders",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -131,34 +137,14 @@ export function ReminderForm({
 
             <div className="space-y-2">
               <Label htmlFor={`eventDate-${reminder.id}`}>Event Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !reminder.eventDate ? "text-muted-foreground" : ""
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {reminder.eventDate
-                      ? format(new Date(reminder.eventDate), "PPP")
-                      : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={
-                      reminder.eventDate
-                        ? new Date(reminder.eventDate)
-                        : undefined
-                    }
-                    onSelect={(date) => handleDateSelect(reminder.id, date)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <DatePicker
+                date={
+                  reminder.eventDate ? new Date(reminder.eventDate) : undefined
+                }
+                onDateChange={(date) => handleDateSelect(reminder.id, date)}
+                placeholder="Select date"
+                buttonClassName="w-full border-green-200 focus:border-green-500 focus:ring-green-500"
+              />
             </div>
 
             <div className="space-y-2">

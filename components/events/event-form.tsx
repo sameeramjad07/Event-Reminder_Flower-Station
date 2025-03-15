@@ -4,8 +4,7 @@ import type React from "react";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { format } from "date-fns";
-import { CalendarIcon, Clock, MapPin } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,15 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { DatePicker } from "@/components/custom-calendar/date-picker";
 import { createEvent, updateEvent } from "@/app/actions/events";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface EventFormProps {
   initialData?: {
@@ -59,6 +52,7 @@ export default function EventForm({
   });
 
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     console.log("EventForm component mounted", {
@@ -81,14 +75,22 @@ export default function EventForm({
       // Validate form
       if (!formData.title || !formData.date || !formData.type) {
         console.error("Form validation failed: missing required fields");
-        toast.error("Please fill in all required fields");
+        toast({
+          title: "Validation Error",
+          description: "Please fill in all required fields",
+          variant: "destructive",
+        });
         setIsSubmitting(false);
         return;
       }
 
       if (formData.type === "Other" && !formData.customType) {
         console.error("Form validation failed: missing custom event type");
-        toast.error("Please specify a custom event type");
+        toast({
+          title: "Validation Error",
+          description: "Please specify a custom event type",
+          variant: "destructive",
+        });
         setIsSubmitting(false);
         return;
       }
@@ -117,7 +119,10 @@ export default function EventForm({
       console.log("Event save result:", result);
 
       if (result.success) {
-        toast.success("Event saved successfully");
+        toast({
+          title: isEditing ? "Event Updated" : "Event Created",
+          description: result.message,
+        });
         router.push("/dashboard/events");
         router.refresh();
       } else {
@@ -125,8 +130,12 @@ export default function EventForm({
       }
     } catch (error) {
       console.error("Error saving event:", error);
-
-      toast.error("Failed to save event. Please try again.");
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error ? error.message : "Failed to save event",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -137,7 +146,10 @@ export default function EventForm({
       <div className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-green-800">
+            <Label
+              htmlFor="title"
+              className="text-green-800 dark:text-green-300"
+            >
               Event Title <span className="text-rose-500">*</span>
             </Label>
             <Input
@@ -151,38 +163,27 @@ export default function EventForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="date" className="text-green-800">
+            <Label
+              htmlFor="date"
+              className="text-green-800 dark:text-green-300"
+            >
               Event Date <span className="text-rose-500">*</span>
             </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal border-green-200",
-                    !formData.date ? "text-green-500" : ""
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 text-green-600" />
-                  {formData.date ? format(formData.date, "PPP") : "Select date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 border-green-100">
-                <Calendar
-                  mode="single"
-                  selected={formData.date}
-                  onSelect={(date) => handleChange("date", date)}
-                  initialFocus
-                  className="rounded-md border-green-100"
-                />
-              </PopoverContent>
-            </Popover>
+            <DatePicker
+              date={formData.date}
+              onDateChange={(date) => handleChange("date", date)}
+              placeholder="Select date"
+              buttonClassName="border-green-200 focus:border-green-500 focus:ring-green-500"
+            />
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-2">
-            <Label htmlFor="time" className="text-green-800">
+            <Label
+              htmlFor="time"
+              className="text-green-800 dark:text-green-300"
+            >
               Event Time
             </Label>
             <div className="flex items-center">
@@ -198,7 +199,10 @@ export default function EventForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="type" className="text-green-800">
+            <Label
+              htmlFor="type"
+              className="text-green-800 dark:text-green-300"
+            >
               Event Type <span className="text-rose-500">*</span>
             </Label>
             <Select
@@ -221,7 +225,10 @@ export default function EventForm({
 
         {formData.type === "Other" && (
           <div className="space-y-2">
-            <Label htmlFor="customType" className="text-green-800">
+            <Label
+              htmlFor="customType"
+              className="text-green-800 dark:text-green-300"
+            >
               Custom Event Type <span className="text-rose-500">*</span>
             </Label>
             <Input
@@ -236,7 +243,10 @@ export default function EventForm({
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="location" className="text-green-800">
+          <Label
+            htmlFor="location"
+            className="text-green-800 dark:text-green-300"
+          >
             Location
           </Label>
           <div className="flex items-center">
@@ -252,7 +262,10 @@ export default function EventForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description" className="text-green-800">
+          <Label
+            htmlFor="description"
+            className="text-green-800 dark:text-green-300"
+          >
             Description
           </Label>
           <Textarea
@@ -266,7 +279,10 @@ export default function EventForm({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="attendees" className="text-green-800">
+          <Label
+            htmlFor="attendees"
+            className="text-green-800 dark:text-green-300"
+          >
             Attendees (comma separated emails)
           </Label>
           <Textarea
