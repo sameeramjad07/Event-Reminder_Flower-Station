@@ -125,6 +125,7 @@ export default function EventForm({
       }
     } catch (error) {
       console.error("Error saving event:", error);
+
       toast.error("Failed to save event. Please try again.");
     } finally {
       setIsSubmitting(false);
